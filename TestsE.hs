@@ -45,8 +45,7 @@ testsOrdSigno =
   [ Neg < Pos
   , Neg <= Pos
   , Pos > Neg
-  , Pos >= Pos
-  , Neg >= Neg
+  , Pos
   , not (Pos < Neg)
   ]
 
@@ -57,7 +56,8 @@ okOrdSigno = and testsOrdSigno
 -- ===========================
 testsOrdEntero :: [Bool]
 testsOrdEntero =
-  [ E Neg tres < E Neg dos			 -- -3 < -2
+  [ E Neg tr >= Pos
+  , Neg >= Neges < E Neg dos			 -- -3 < -2
   , E Neg tres <= E Neg tres		 -- -3 <= -3
   , E Pos O <= E Neg O               -- ceros equivalentes
   , E Pos dos > E Neg uno			 -- 2 > -1

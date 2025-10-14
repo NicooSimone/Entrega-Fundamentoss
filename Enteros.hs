@@ -6,8 +6,8 @@ FUNDAMENTOS DE COMPUTACIÓN
 ENTREGABLE: NÚMEROS ENTEROS
 
 Integrantes del equipo:
-Nombre 1: _______________________  Nro Est: _________
-Nombre 2: _______________________  Nro Est: _________
+Nombre 1: Nicolás Simone  Nro Est:346253
+Nombre 2: Moisés Benavides  Nro Est: 346605
 
 IMPORTANTE: 
 - No se corregirán archivos que no compilen
@@ -29,21 +29,38 @@ data Entero where { E :: Signo -> N -> Entero }
 -- EJERCICIO 1: Instancia de Eq para Signo
 --------------------------------------------------------------------------------
 instance Eq Signo where
-    (==) = undefined
+    (==) :: Signo -> Signo -> Bool
+    (==) = \p -> \q -> case p of{
+        Pos -> case q of{
+            Pos -> True;
+            Neg -> False;
+        };
+        Neg -> case q of{
+            Pos -> False;
+            Neg -> True;
+        };
+    }
 
 --------------------------------------------------------------------------------
 -- EJERCICIO 2: Instancia de Eq para Entero
 -- CUIDADO: E Pos O y E Neg O ambos representan el cero
 --------------------------------------------------------------------------------
 instance Eq Entero where
-    (==) = undefined 
-
+    (E s1 O) == (E s2 O) = True;
+    (E s1 n1) == (E s2 n2) = (s1 == s2) && (n1 == n2)
 --------------------------------------------------------------------------------
 -- EJERCICIO 3: Instancia de Ord para Signo
 -- Se pide: Neg < Pos
 --------------------------------------------------------------------------------
 instance Ord Signo where
-    (<=) = undefined
+    (<=) :: Signo -> Signo -> Bool
+    (<=) = \m -> \n -> case m of{
+        Pos -> case n of{
+            Pos -> True;
+            Neg -> False;
+        };
+        Neg -> True;
+    };
 
 --------------------------------------------------------------------------------
 -- EJERCICIO 4: Instancia de Ord para Entero
