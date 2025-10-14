@@ -46,8 +46,35 @@ instance Eq Signo where
 -- CUIDADO: E Pos O y E Neg O ambos representan el cero
 --------------------------------------------------------------------------------
 instance Eq Entero where
-    (E s1 O) == (E s2 O) = True;
-    (E s1 n1) == (E s2 n2) = (s1 == s2) && (n1 == n2)
+    (==) :: Entero -> Entero -> Bool
+    (==) = \m -> \n -> case m of{
+        E Pos O -> case n of{
+           E Pos O -> True;
+           E Neg O -> True;
+           E Pos (S y) -> False;
+           E Neg (S y) -> False;
+        };
+        E Neg O -> case n of{
+           E Pos O -> True;
+           E Neg O -> True;
+           E Pos (S y) -> False;
+           E Neg (S y) -> False;
+        };   
+        E Pos (S x) -> case n of{
+           E Pos O -> False;
+           E Neg O -> False;
+           E Pos (S y) -> x == y;
+           E Neg (S y) -> False;
+        };
+        E Neg (S x) -> case n of{
+           E Pos O -> False;
+           E Neg O -> False;
+           E Pos (S y) -> False;
+           E Neg (S y) -> x == y;
+        };
+    };
+    --(E s1 O) == (E s2 O) = True;
+    --(E s1 n1) == (E s2 n2) = (s1 == s2) && (n1 == n2)
 --------------------------------------------------------------------------------
 -- EJERCICIO 3: Instancia de Ord para Signo
 -- Se pide: Neg < Pos
@@ -70,7 +97,33 @@ instance Ord Signo where
 -- CUIDADO: E Pos O y E Neg O ambos representan el cero
 --------------------------------------------------------------------------------
 instance Ord Entero where
-    (<=) = undefined
+    (<=) :: Entero -> Entero -> Bool
+    (<=) = \m -> \n -> case m of{
+        E Pos O -> case n of{
+            E Pos O -> True;
+            E Neg O -> True;
+            E Pos (S y) -> True;
+            E Neg (S y) -> False;
+        };
+        E Neg O -> case n of{
+            E Pos O -> True;
+            E Neg O -> True;
+            E Pos (S y) -> True;
+            E Neg (S y) -> False;
+        };
+        E Pos (S x) -> case n of{
+            E Pos O -> False;
+            E Neg O -> False;
+            E Pos (S y) -> x <= y;
+            E Neg (S y) -> False;
+        };
+        E Neg (S x) -> case n of{
+            E Pos O -> True;
+            E Neg O -> True;
+            E Pos (S y) -> True;
+            E Neg (S y) -> y <= x;
+        };
+    }
 
 --------------------------------------------------------------------------------
 -- EJERCICIO 5: Instancia de Num para Entero
@@ -79,7 +132,45 @@ instance Ord Entero where
 -- Cuando una operación da como resultado cero, se puede devolver E Pos O o E Neg O indistintamente
 --------------------------------------------------------------------------------
 instance Num Entero where
-    (+) = undefined
-    (*) = undefined
+   
+   
+   --CORREGIR (+)
+   
+   {- (+) :: Entero -> Entero -> Entero
+    (+) = \m -> \n -> case m of{
+        E Pos O -> case n of{
+            E Pos O ->  E Pos O;
+            E Neg O ->  E Pos O;
+            E Pos (S y) -> n;
+            E Neg (S y) -> n;
+        };
+         E Neg O -> case n of{
+            E Pos O ->  E Pos O;
+            E Neg O ->  E Pos O;
+            E Pos (S y) -> n;
+            E Neg (S y) -> n;
+        };
+         E Pos (S x) -> case n of{
+            E Pos O ->  m;
+            E Neg O ->  m;
+            E Pos (S y) -> m + n;
+            E Neg (S y) -> case;
+        };
+          E Neg (S x) -> case n of{
+            E Pos O ->  E Pos O;
+            E Neg O ->  E Pos O;
+            E Pos (S y) -> n;
+            E Neg (S y) -> n;
+        };
+    -}
+    (*) :: Entero -> Entero -> Entero
+    (*) = \m -> \n -> case m of{
+         E Pos O -> E Pos O;
+         E Neg O -> E Pos O;
+         E Pos (S x) -> case n of{
+            E Pos O ->  E Pos O;
+            E Neg O ->  E Pos O;
+            E Pos (S y) -> (E Pos (x*y) + (S y) + x)   --FALTAN CASOS
+    }
     (-) = undefined
     
