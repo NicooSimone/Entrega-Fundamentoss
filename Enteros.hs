@@ -149,8 +149,8 @@ instance Num Entero where
         E Pos (S x) -> case n of{
             E Pos O ->  m;
             E Neg O ->  m;
-            E Pos (S y) -> m + n;
-            E Neg (S y) -> case ((S x) <= (S y)){
+            E Pos (S y) -> E Pos (S(S(x + y)));
+            E Neg (S y) -> case ((S x) <= (S y)) of{
                 True -> E Neg (y - x);
                 False -> E Pos (x - y);
             };
@@ -158,11 +158,11 @@ instance Num Entero where
         E Neg (S x) -> case n of{
             E Pos O ->  E Pos O;
             E Neg O ->  E Pos O;
-            E Pos (S y) -> case ((S x) <= (S y)){
+            E Pos (S y) -> case ((S x) <= (S y)) of{
                 True -> E Pos (y - x);
                 False -> E Neg (x - y);
             };
-            E Neg (S y) -> E Neg (x + y);
+            E Neg (S y) -> E Neg (S(S(x + y)));
         };
     }
 
@@ -173,8 +173,47 @@ instance Num Entero where
         E Pos (S x) -> case n of{
             E Pos O ->  E Pos O;
             E Neg O ->  E Pos O;
-            E Pos (S y) -> (E Pos (x*y) + (S y) + x)   --FALTAN CASOS
-        }
+            E Pos (S y) -> E Pos ((x*y) + (S y) + x);
+            E Neg (S y) -> E Neg ((x*y) + (S y) + x);
+        };
+        E Neg (S x) -> case n of{
+            E Pos O -> E Pos O;
+            E Neg O -> E Pos O;
+            E Pos (S y) -> E Neg ((x*y) + (S y) + x);
+            E Neg (S y) -> E Pos ((x*y) + (S y) + x);
+        };
     }
-    (-) = undefined
+    (-) :: Entero -> Entero -> Entero
+    (-) = \m -> \n -> case m of{
+        E Pos O -> case n of{
+            E Pos O -> E Pos O;
+            E Neg O -> E Pos O;  
+            E Pos (S y) -> E Neg (S y);
+            E Neg (S y) -> E Pos (S y); 
+        };
+        E Neg O -> case n of{
+            E Pos O -> E Pos O;
+            E Neg O -> E Pos O;  
+            E Pos (S y) -> E Neg (S y);
+            E Neg (S y) -> E Pos (S y); 
+        };
+        E Pos (S x) -> case n of{
+            E Pos O -> m;
+            E Neg O -> m;
+            E Pos (S y) -> case ((S x) <= (S y)) of{   
+                True -> E Neg (y - x);
+                False -> E Pos (x - y);
+            };
+            E Neg (S y) -> E Pos (S(S(x + y)));    
+        };
+        E Neg (S x) -> case n of{
+            E Pos O -> m;
+            E Neg O -> m;
+            E Pos (S y) -> E Neg (S(S(x + y)));      
+            E Neg (S y) -> case ((S x) <= (S y)) of{
+                True -> E Pos (y - x);    
+                False -> E Neg (x - y);
+            };
+        };
+    }
     
